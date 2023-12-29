@@ -28,9 +28,7 @@ export const authProvider: AuthProvider = {
   },
   getIdentity: () => {
     const persistedUser = localStorage.getItem("user");
-    const user = persistedUser ? JSON.parse(persistedUser) : null;
-
-    return Promise.resolve(user);
+    return Promise.resolve({id: persistedUser});
   },
 };
 
