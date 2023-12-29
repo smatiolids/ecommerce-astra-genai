@@ -14,7 +14,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ProductGrid from "./ProductGrid";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 
-export const ProductShow = (props) => {
+export const ProductShow = (props: { id: string; vector: Number[] }) => {
   const record = useRecordContext();
   const [products, setProducts] = useState([]);
 
@@ -46,7 +46,7 @@ export const ProductShow = (props) => {
                   width="400px"
                   dynamicHeight={true}
                 >
-                  {record.images.map((URL, index) => (
+                  {record.images.map((URL: string, index: number) => (
                     <div className="slide max-h-128">
                       <img alt="sample_file" src={URL} key={index} />
                     </div>
@@ -74,7 +74,7 @@ export const ProductShow = (props) => {
                 minimumFractionDigits: 2,
               }}
             />
-            <Button variant="contained">Add To Cart</Button>
+            <Button variant="contained" label="Add To Cart" />
             <Typography mt={1} variant="h5">
               Specification
             </Typography>
@@ -83,7 +83,7 @@ export const ProductShow = (props) => {
               label="Specifications"
               render={(record) =>
                 record.specification
-                  ? record.specification.map((s, ix) => (
+                  ? record.specification.map((s: any, ix: number) => (
                       <div key={ix}>
                         <Typography variant="caption">
                           {s.key ? `${s.key}:` : null} {s.value}
@@ -106,12 +106,12 @@ export const ProductShow = (props) => {
   );
 };
 
-const ProductRecommendation = (props) => {
+const ProductRecommendation = (props: { id: string; vector: Number[] }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const getRecommendation = async (id, vector) => {
-      console.log("Record", vector);
+    const getRecommendation = async (id: string, vector: Number[]) => {
+      // console.log("Record", vector);
 
       const res = await fetch(`/api/search`, {
         method: "POST",
@@ -122,7 +122,7 @@ const ProductRecommendation = (props) => {
       });
 
       const response = await res.json();
-      setProducts(response.data.documents.filter((d) => d._id !== id));
+      setProducts(response.data.documents.filter((d: any) => d._id !== id));
     };
 
     getRecommendation(props.id, props.vector);
@@ -135,7 +135,7 @@ const ProductRecommendation = (props) => {
       <Grid item m={2}>
         <Typography variant="h4">
           <Tooltip title="Product recommendation based on similarity with current product">
-            <AutoFixHighIcon color="primary" fontSize="large"/>
+            <AutoFixHighIcon color="primary" fontSize="large" />
           </Tooltip>
           We also recommend you
         </Typography>

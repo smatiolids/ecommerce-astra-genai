@@ -5,14 +5,14 @@ const auth = new GoogleAuth({
   scopes: ["https://www.googleapis.com/auth/cloud-platform"],
 });
 
-const projectId = process.env.GCP_PROJECT_ID;
-const location = process.env.GCP_REGION;
+const projectId: string = process.env.GCP_PROJECT_ID as string;
+const location: string = process.env.GCP_REGION as string;
 const vertexAI = new VertexAI({ project: projectId, location: location });
 
 export async function MultiModalPrompt(
   file: string | null,
   fileType: string,
-  prompt: text | null
+  prompt: string | null
 ) {
   const model = "gemini-pro-vision";
   const generativeVisionModel = vertexAI.preview.getGenerativeModel({
@@ -25,13 +25,13 @@ export async function MultiModalPrompt(
         role: "user",
         parts: [
           {
-            inlineData: {
-              data: file,
-              mimeType: fileType
+            inline_data: {
+              data: file as string,
+              mime_type: fileType,
             },
           },
           {
-            text: prompt,
+            text: prompt as string,
           },
         ],
       },
@@ -60,14 +60,18 @@ export async function GetMultimodalEmbedding(
    */
   const model = "multimodalembedding@001";
   const requestUrl = `https://${location}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${location}/publishers/google/models/${model}:predict`;
-  const body = { instances: [{}] };
+
+  var obj: {[k: string]: any} = {};
 
   if (file)
-    body.instances[0]["image"] = {
-      bytesBase64Encoded: file,
+    obj.image = {
+      bytesBase64Encoded: file as string,
     };
 
-  if (text) body.instances[0]["text"] = text;
+  if (text) obj.text = text;
+
+  const body = { instances: [obj] };
+  console.log(body)
 
   const options: Record<string, any> = {
     method: "POST",

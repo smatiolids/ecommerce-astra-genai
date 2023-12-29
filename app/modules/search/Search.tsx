@@ -5,7 +5,6 @@ import {
   useNotify,
   TextInput,
   SaveButton,
-  SelectInput,
 } from "react-admin";
 import {
   Grid,
@@ -25,9 +24,9 @@ export const Search = () => {
   const [products, setProducts] = useState([]);
   const { formState } = useForm();
   const notify = useNotify();
-  const [file, setFile] = useState();
-  const [preview, setPreview] = useState();
-  const [searchDescription, setSearchDescription] = useState();
+  const [file, setFile] = useState<any>();
+  const [preview, setPreview] = useState<string>();
+  const [searchDescription, setSearchDescription] = useState<string | null>();
   const [camera, setCamera] = useState(false);
 
   // create a preview as a side effect, whenever selected file is changed
@@ -37,22 +36,26 @@ export const Search = () => {
       return;
     }
 
-    const objectUrl = URL.createObjectURL(file);
+    const objectUrl: string = URL.createObjectURL(file);
     setPreview(objectUrl);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [file]);
 
-  const onChangeHandler = (event) => {
+  const onChangeHandler = (event: any) => {
     setFile(event);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     try {
       const formData = new FormData();
-      if (file) formData.append("file", file); //data.file.rawFile);
-
+      if (file) {
+        formData.append("file", file); //data.file.rawFile);
+        notify("Searching with images can be slow. Wait until it finishes...", {
+          type: "info",
+        });
+      }
       formData.append(
         "post",
         JSON.stringify({
@@ -73,7 +76,7 @@ export const Search = () => {
       else setSearchDescription(null);
     } catch (error) {
       console.error("Error running search:", error);
-      notify("error", "Error running search");
+      notify("Error running search", { type: "error" });
     }
   };
 
@@ -166,7 +169,11 @@ export const Search = () => {
   );
 };
 
-function WebCamDialog(props) {
+function WebCamDialog(props: {
+  open: boolean;
+  setCamera: (x: boolean) => void;
+  onCapture: (imageSrc: string) => Promise<void>;
+}) {
   return (
     <Dialog fullScreen open={props.open} onClose={() => props.setCamera(false)}>
       <WebcamCapture onCapture={props.onCapture} />

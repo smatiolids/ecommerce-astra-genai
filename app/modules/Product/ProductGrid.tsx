@@ -10,7 +10,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 
-const ProductGrid = (props) => {
+const ProductGrid = (props: { data: any[] }) => {
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
       {props.data.map((record) => (
@@ -42,7 +42,7 @@ const ProductGrid = (props) => {
   );
 };
 
-function currencyFormat(num) {
+function currencyFormat(num : Number) {
   return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
 
