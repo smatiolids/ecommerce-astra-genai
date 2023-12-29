@@ -17,7 +17,7 @@ const ProductGrid = (props: { data: any[] }) => {
         <Grid key={record.file} xs={12} sm={6} md={4} lg={3} xl={2} item>
           <Card>
             <CardActionArea href={`#/product/${record._id}/show`}>
-              <CardMedia image={`${record.images[0]}`} sx={{ height: 140 }} />
+              <CardMedia image={`${record.images[0].replace('https://','http://')}`} sx={{ height: 140 }} />
               <CardContent sx={{ paddingBottom: "0.5em" }}>
                 <Typography
                   sx={{ fontSize: 14 }}
