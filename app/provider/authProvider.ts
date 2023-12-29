@@ -27,8 +27,10 @@ export const authProvider: AuthProvider = {
     return Promise.resolve(undefined);
   },
   getIdentity: () => {
-    const persistedUser = localStorage.getItem("user");
-    return Promise.resolve({id: persistedUser});
+    return Promise.resolve({
+      id: 'datastax',
+      fullName: 'DataStax',
+  });
   },
 };
 
