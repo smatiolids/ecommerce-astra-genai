@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import { GetMultimodalEmbedding, MultiModalPrompt } from "./vertex";
-export const maxDuration = 60; 
 
 export async function POST(req: NextRequest) {
   /**
@@ -21,6 +20,7 @@ export async function POST(req: NextRequest) {
 
     if (file) {
       imageb64 = Buffer.from(await file.arrayBuffer()).toString("base64");
+      
       console.log("Generating image description");
 
       description = await MultiModalPrompt(
