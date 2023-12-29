@@ -10,14 +10,9 @@ const auth = new GoogleAuth({
 const projectId: string = process.env.GCP_PROJECT_ID as string;
 const location: string = process.env.GCP_REGION as string;
 
-/**
- * 
- */
 
 function setCredentialsFile(): void {
-  // Check if the file exists
   if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS as string)) {
-      // If the file does not exist, create it with the specified content
       fs.writeFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS as string, process.env.CREDS as string, 'utf-8');
       console.log(`File '${process.env.GOOGLE_APPLICATION_CREDENTIALS}' created with content from environment variable.`);
   } else {

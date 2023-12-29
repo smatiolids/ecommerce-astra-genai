@@ -1,5 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { GetMultimodalEmbedding, MultiModalPrompt } from "./vertex";
+export const maxDuration = 60; 
+
 export async function POST(req: NextRequest) {
   /**
    * Perform the embedding generation, then the vector search on astra
