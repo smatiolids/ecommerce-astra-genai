@@ -70,7 +70,7 @@ export const Search = () => {
       });
 
       const response = await res.json();
-      setProducts(response.data.documents);
+      setProducts(response.data);
       if (response.promptDescription)
         setSearchDescription(response.promptDescription);
       else setSearchDescription(null);

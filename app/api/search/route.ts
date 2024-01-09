@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { GetMultimodalEmbedding, MultiModalPrompt } from "./vertex";
+import db from "@/app/provider/AstraJSON";
 
 export async function POST(req: NextRequest) {
   /**
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
 
     if (file) {
       imageb64 = Buffer.from(await file.arrayBuffer()).toString("base64");
-      
+
       console.log("Generating image description");
 
       description = await MultiModalPrompt(
@@ -38,12 +39,8 @@ export async function POST(req: NextRequest) {
       console.log("Generating embedding: DONE");
     } else {
       console.log("Generating embedding for query");
-      searchEmbedding = await GetMultimodalEmbedding(
-        null,
-        post["query"]
-      );
+      searchEmbedding = await GetMultimodalEmbedding(null, post["query"]);
       console.log("Generating embedding for query: DONE");
-
     }
 
     if (post["n"]) n = post["n"];
@@ -55,36 +52,24 @@ export async function POST(req: NextRequest) {
 
   console.log("Searching on Astra");
 
-  const requestUrl = `${process.env.ASTRA_DB_API_ENDPOINT}/api/json/v1/default_keyspace/ecommerce_products`;
+  const collection = await db.collection("ecommerce_products");
 
-  const options: Record<string, any> = {
-    method: "POST",
-    headers: {
-      Token: process.env.ASTRA_DB_APPLICATION_TOKEN,
-      "Content-Type": "application/json",
-    },
-  };
-
-  if (req.body) {
-    options.body = JSON.stringify({
-      find: {
+  const data = await collection
+    .find(
+      {},
+      {
         sort: {
           $vector: searchEmbedding,
         },
-        options: {
-          limit: n,
-          includeSimilarity: true,
-        },
-      },
-    });
-  }
-
-  const response = await fetch(requestUrl, options);
-  const data = await response.json();
-  console.log("Searching on Astra: DONE");
+        limit: n,
+        includeSimilarity: true,
+      }
+    )
+    .toArray();
+  console.log("Searching on Astra: DONE", data);
 
   return NextResponse.json(
-    { ...data, promptDescription: description },
-    { status: response.status }
+    { data , promptDescription: description },
+    { status: 200 }
   );
 }
