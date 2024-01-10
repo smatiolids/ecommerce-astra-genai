@@ -10,7 +10,6 @@ const auth = new GoogleAuth({
 const projectId: string = process.env.GCP_PROJECT_ID as string;
 const location: string = process.env.GCP_REGION as string;
 
-
 function setCredentialsFile(): void {
   if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS as string)) {
       fs.writeFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS as string, process.env.CREDS as string, 'utf-8');
@@ -53,8 +52,6 @@ export async function MultiModalPrompt(
     ],
   };
 
-  // console.log(JSON.stringify(request))
-
   // Create the response
   const response = await generativeVisionModel.generateContent(request);
   // Wait for the response to complete
@@ -86,7 +83,6 @@ export async function GetMultimodalEmbedding(
   if (text) obj.text = text;
 
   const body = { instances: [obj] };
-  console.log(body)
 
   const options: Record<string, any> = {
     method: "POST",
@@ -99,7 +95,6 @@ export async function GetMultimodalEmbedding(
 
   const response = await fetch(requestUrl, options);
   const data = await response.json();
-  console.log("Res GCP: ", data);
 
   // Balance both embeddings
   if (data.predictions[0].textEmbedding && data.predictions[0].imageEmbedding) {

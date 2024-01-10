@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { GetMultimodalEmbedding, MultiModalPrompt } from "./vertex";
-import db from "@/app/provider/AstraJSON";
+import getDB from "@/app/api/AstraClient";
 
 export async function POST(req: NextRequest) {
   /**
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   }
 
   console.log("Searching on Astra");
-
+  const db = await getDB();
   const collection = await db.collection("ecommerce_products");
 
   const data = await collection
@@ -66,10 +66,10 @@ export async function POST(req: NextRequest) {
       }
     )
     .toArray();
-  console.log("Searching on Astra: DONE", data);
+  console.log("Searching on Astra: DONE");
 
   return NextResponse.json(
-    { data , promptDescription: description },
+    { data, promptDescription: description },
     { status: 200 }
   );
 }

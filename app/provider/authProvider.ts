@@ -3,8 +3,8 @@ import { AuthProvider, HttpError } from "react-admin";
 export const authProvider: AuthProvider = {
   login: ({ username, password }) => {
     if (
-      username === "datastax" &&
-      password === "astra"
+      username === process.env.NEXT_PUBLIC_APP_USER &&
+      password === process.env.NEXT_PUBLIC_APP_PASS
     ) {
       localStorage.setItem("user", username);
       return Promise.resolve();
@@ -28,8 +28,8 @@ export const authProvider: AuthProvider = {
   },
   getIdentity: () => {
     return Promise.resolve({
-      id: 'datastax',
-      fullName: 'DataStax',
+      id: process.env.NEXT_PUBLIC_APP_USER as string,
+      fullName: 'DataStax Astra DB Vector',
   });
   },
 };

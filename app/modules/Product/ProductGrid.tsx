@@ -13,8 +13,8 @@ import {
 const ProductGrid = (props: { data: any[] }) => {
   return (
     <Grid container spacing={2} sx={{ mt: 0 }}>
-      {props.data.map((record) => (
-        <Grid key={record.file} xs={12} sm={6} md={4} lg={3} xl={2} item>
+      {props.data.map((record, ix) => (
+        <Grid key={ix} xs={12} sm={6} md={4} lg={3} xl={2} item>
           <Card>
             <CardActionArea href={`#/product/${record._id}/show`}>
               <CardMedia image={`${record.images[0].replace('https://','http://')}`} sx={{ height: 140 }} />

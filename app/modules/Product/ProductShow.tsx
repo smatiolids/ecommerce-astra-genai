@@ -8,7 +8,6 @@ import {
   WithRecord,
   useRecordContext,
 } from "react-admin";
-import { useGetMany, useShowController } from "react-admin";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ProductGrid from "./ProductGrid";
@@ -17,10 +16,6 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 export const ProductShow = (props: { id: string; vector: Number[] }) => {
   const record = useRecordContext();
   const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    console.log("Record", record);
-  }, [record]);
 
   return (
     <Show>
@@ -111,8 +106,6 @@ const ProductRecommendation = (props: { id: string; vector: Number[] }) => {
 
   useEffect(() => {
     const getRecommendation = async (id: string, vector: Number[]) => {
-      // console.log("Record", vector);
-
       const res = await fetch(`/api/search`, {
         method: "POST",
         body: JSON.stringify({
@@ -122,7 +115,7 @@ const ProductRecommendation = (props: { id: string; vector: Number[] }) => {
       });
 
       const response = await res.json();
-      setProducts(response.data.documents.filter((d: any) => d._id !== id));
+      setProducts(response.data.filter((d: any) => d._id !== id));
     };
 
     getRecommendation(props.id, props.vector);
@@ -141,7 +134,7 @@ const ProductRecommendation = (props: { id: string; vector: Number[] }) => {
         </Typography>
       </Grid>
       <Grid item>
-        {products && products.length > 0 && <ProductGrid data={products} />}
+        {products && products.length > 0 && <ProductGrid data={products} key={1}/>}
       </Grid>
     </Grid>
   );

@@ -6,6 +6,9 @@ import AstraDataProvider from "../provider/AstraDataProvider";
 import { ProductShow } from "../modules/Product/ProductShow";
 import { authProvider } from "../provider/authProvider";
 import AstraLoginPage from "../AstraLogin";
+import { CatalogList } from "../modules/catalog/CatalogList";
+import { CatalogShow } from "../modules/catalog/CatalogShow";
+import { AstraResources } from "../provider/AstraResources";
 
 const AdminApp = () => (
   <Admin
@@ -19,6 +22,12 @@ const AdminApp = () => (
     loginPage={AstraLoginPage}
   >
     <Resource name="product" show={ProductShow} />
+    <Resource
+      name="catalog"
+      list={CatalogList}
+      show={CatalogShow}
+      options={{ key: AstraResources.product.key, label: "Product Catalog" }}
+    />
   </Admin>
 );
 
