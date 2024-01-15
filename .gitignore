@@ -42,3 +42,4 @@ jspm_packages
 
 public/img/*
 tmp/*
+data/tmp/*
